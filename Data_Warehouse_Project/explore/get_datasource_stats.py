@@ -1,5 +1,6 @@
 import boto3
 
+
 def get_total_size(bucket, prefix):
     s3 = boto3.client("s3", region_name="us-west-2")
     paginator = s3.get_paginator("list_objects_v2")
