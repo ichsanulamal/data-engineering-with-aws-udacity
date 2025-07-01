@@ -1,8 +1,10 @@
 import boto3
 
+session = boto3.Session(profile_name="udacity")
+
 
 def get_total_size(bucket, prefix):
-    s3 = boto3.client("s3", region_name="us-west-2")
+    s3 = session.client("s3", region_name="us-west-2")
     paginator = s3.get_paginator("list_objects_v2")
     pages = paginator.paginate(Bucket=bucket, Prefix=prefix)
 
@@ -22,7 +24,7 @@ def get_total_size(bucket, prefix):
 bucket_name = "udacity-dend"
 
 # Get sizes
-song_size, song_count = get_total_size(bucket_name, "song_data/")
+song_size, song_count = get_total_size(bucket_name, "song-data/")
 log_size, log_count = get_total_size(bucket_name, "log_data/")
 
 # Summary
