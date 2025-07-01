@@ -1,5 +1,6 @@
 provider "aws" {
   region = "us-west-2"
+  profile = "udacity"
 }
 
 data "aws_vpc" "default" {
