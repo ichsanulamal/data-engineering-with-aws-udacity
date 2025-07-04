@@ -112,6 +112,8 @@ ORDER BY sort_order;
 
 ### Sample Output:
 
+![all_rows](static/all_rows.png)
+
 ![Query Result](static/image.png)
 
 ## 🧩 Extras

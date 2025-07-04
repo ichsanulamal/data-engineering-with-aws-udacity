@@ -1,7 +1,7 @@
 import boto3
 
-session = boto3.Session(profile_name='udacity', region_name='us-east-1')
-glue = session.client('glue') 
+session = boto3.Session(profile_name="udacity", region_name="us-east-1")
+glue = session.client("glue")
 
 # Constants
 bucket = "cd0030-sdl-amal"
@@ -10,11 +10,14 @@ prefixes = {
     "accelerometer_trusted": "accelerometer_trusted/",
     "customer_curated": "customer_curated/",
     "step_trainer_trusted": "step_trainer_trusted/",
-    "machine_learning_curated": "machine_learning_curated/"
+    "machine_learning_curated": "machine_learning_curated/",
 }
 
 database_name = "default"
-iam_role = "arn:aws:iam::550842457597:role/service-role/AWSGlueServiceRole"  # <-- Replace this
+iam_role = (
+    "arn:aws:iam::550842457597:role/service-role/AWSGlueServiceRole"  # <-- Replace this
+)
+
 
 # Create database if not exists
 def ensure_database_exists():
@@ -25,11 +28,12 @@ def ensure_database_exists():
         glue.create_database(DatabaseInput={"Name": database_name})
         print(f"Created Glue database: {database_name}")
 
+
 def create_or_update_crawler(name, s3_path, table_name):
     s3_target = {
         "Path": f"s3://{bucket}/{s3_path}",
         "Exclusions": [],
-        "ConnectionName": ""
+        "ConnectionName": "",
     }
 
     try:
@@ -50,16 +54,18 @@ def create_or_update_crawler(name, s3_path, table_name):
             Targets={"S3Targets": [s3_target]},
             TablePrefix="",  # <- Table name will be just s3_path's last folder
             SchemaChangePolicy={
-                'UpdateBehavior': 'UPDATE_IN_DATABASE',
-                'DeleteBehavior': 'DEPRECATE_IN_DATABASE'
-            }
+                "UpdateBehavior": "UPDATE_IN_DATABASE",
+                "DeleteBehavior": "DEPRECATE_IN_DATABASE",
+            },
         )
         print(f"Created crawler: {name}")
+
 
 # Trigger crawler run
 def start_crawler(name):
     glue.start_crawler(Name=name)
     print(f"Started crawler: {name}")
+
 
 # Execute
 for table_name, prefix in prefixes.items():
